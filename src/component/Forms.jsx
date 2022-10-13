@@ -4,12 +4,19 @@ import  {FromReducer,InitialState} from '../component/FromReducer'
 const Forms = ()=>{
     const tagRef = useRef();
     const [state, dispatch] = useReducer(FromReducer, InitialState);
-    const handleChange = ()=>{
+    const handleChange = (e) => {
+    dispatch({
+      type: "CHANGE_INPUT",
+      payload: { name: e.target.name, value: e.target.value },
+    });
+  };
 
-    }
-    const handleTags = ()=>{
-
-    }
+  const handleTags = () => {
+    const tags = tagRef.current.value.split(",");
+    tags.forEach((tag) => {
+      dispatch({ type: "ADD_TAG", payload: tag });
+    });
+  };
     return(
         <div style={{marginLeft:"35%"}}>
         <form>
@@ -33,17 +40,14 @@ const Forms = ()=>{
             </select>
             <p>Tags:</p>
             <p>
-                <textarea
-                ref={tagRef}
-                placeholder="Seperate tags with commas..."
-                ></textarea>
+                <textarea ref={tagRef}  placeholder="Seperate tags with commas..."   ></textarea>
             </p>
             <p>
                 <button onClick={handleTags} type="button">
                 Add Tags
                 </button>
             </p>
-            {/* <div className="tags">
+            <div className="tags">
             {state.tags.map((tag) => (
                 <small
                 onClick={() => dispatch({ type: "REMOVE_TAG", payload: tag })}
@@ -52,7 +56,7 @@ const Forms = ()=>{
                 {tag}
                 </small>
             ))}
-            </div> */}
+            </div>
             <div className="quantity">
             <button onClick={() => dispatch({ type: "DECREASE" })} type="button">
                 -
